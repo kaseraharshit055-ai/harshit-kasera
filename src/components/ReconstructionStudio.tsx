@@ -32,6 +32,7 @@ import {
 import { imageTo3DService } from '../services/imageTo3DService';
 import { ThreeCanvas } from './ThreeCanvas';
 import { ShapeXAIPanel } from './ShapeXAIPanel';
+import { ExportModal } from './ExportModal';
 
 interface ReconstructionStudioProps {
   imageInfo: UploadedImageInfo;
@@ -86,6 +87,7 @@ export function ReconstructionStudio({
   const [showReferenceOverlay, setShowReferenceOverlay] = useState(false);
   const [isAIPanelOpen, setIsAIPanelOpen] = useState(true);
   const [showMaterialModal, setShowMaterialModal] = useState(false);
+  const [showExportModal, setShowExportModal] = useState(false);
 
   // Simulate 3-stage synthesis when component mounts
   useEffect(() => {
@@ -266,12 +268,13 @@ export function ReconstructionStudio({
 
           {/* Export Button */}
           <button
-            onClick={handleExportJson}
-            title="Export 3D Scene JSON"
-            className="p-2 rounded-lg bg-[#141414] hover:bg-[#1c1c1c] text-[#ededed] border border-[#262626] text-xs font-mono flex items-center gap-1.5 transition-colors"
+            onClick={() => setShowExportModal(true)}
+            title="Export 3D Model (.OBJ, .GLB, .STL, .JSON)"
+            className="px-2.5 py-1.5 rounded-lg bg-[#141414] hover:bg-[#1f1f1f] text-[#ededed] border border-[#262626] hover:border-[#00f2ff]/40 text-xs font-mono flex items-center gap-1.5 transition-all shadow-sm group"
           >
-            <Download className="w-3.5 h-3.5" />
-            <span className="hidden md:inline">Export</span>
+            <Download className="w-3.5 h-3.5 text-[#00f2ff] group-hover:scale-110 transition-transform" />
+            <span className="font-semibold">Export</span>
+            <span className="hidden sm:inline text-[10px] text-[#888888]">(.OBJ/.GLB/.STL)</span>
           </button>
         </div>
       </header>
@@ -371,6 +374,16 @@ export function ReconstructionStudio({
                 >
                   <Palette className="w-3.5 h-3.5 text-amber-400" />
                   <span>Change Material</span>
+                </button>
+
+                <button
+                  type="button"
+                  onClick={() => setShowExportModal(true)}
+                  className="px-3 py-1.5 rounded-lg bg-[#141414] hover:bg-[#202020] text-[#ededed] border border-[#262626] hover:border-[#00f2ff]/60 flex items-center gap-1.5 transition-colors shadow-sm"
+                  title="Export 3D Model (.OBJ, .GLB, .STL, .JSON)"
+                >
+                  <Download className="w-3.5 h-3.5 text-[#00f2ff]" />
+                  <span>Export 3D</span>
                 </button>
 
                 <button
@@ -567,6 +580,16 @@ export function ReconstructionStudio({
           </div>
         </div>
       )}
+
+      {/* Export 3D Model Modal */}
+      <ExportModal
+        isOpen={showExportModal}
+        onClose={() => setShowExportModal(false)}
+        scene={currentScene}
+        objectName={analysis.objectName}
+        category={analysis.category}
+        materialOverride={materialOverride}
+      />
     </div>
   );
 }
