@@ -1,0 +1,6 @@
+{
+  "name": "ShapeX",
+  "description": "AI-Powered 3D Generation and Interactive 3D Studio with Image-to-3D Reconstruction and Natural Language Editing",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
